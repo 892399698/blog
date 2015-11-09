@@ -1,0 +1,17 @@
+body {
+  /*padding: 50px;*/
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+.c-header .container-fluid{
+  max-width:1200px;
+  margin: 0 auto;
+}
+.c-row{
+  max-width:1200px;
+  margin-left:auto;
+  margin-right:auto;
+}
