@@ -9,7 +9,8 @@ var http= require("http");
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var blogInter = require('./routes/blog_interface');
-
+var entry=require('./routes/entry');
+// var column=require('./routes/column');
 var app = express();
 
 // view engine setup
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/blog_interface', blogInter);
+app.use('/entry',entry);
 
 
 // catch 404 and forward to error handler
