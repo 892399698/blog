@@ -21,6 +21,7 @@ router.get('/articles',function(req,res,next){
 		}
 	})
 })
+//获取栏目列表
 router.get('/columns',function(req,res,next){
 	res.send({
 		code:1000,
@@ -36,7 +37,15 @@ router.get('/columns',function(req,res,next){
 			total_record:1
 		}
 	})
-})
+});
+//添加栏目
+router.post('/columns',function(req,res,next){
+	// console.log(req);
+	console.log(req.body);
+	res.send({
+		code:1000
+	})
+});
 router.get('/init_data',function(req,res,next){
 	res.send({
 		code:1000,
