@@ -42,6 +42,18 @@ router.get('/columns',function(req,res,next){
 router.post('/columns',function(req,res,next){
 	// console.log(req);
 	console.log(req.body);
+	if(!req.body){
+		res.send({
+			code:2000,
+			msg:"提交数据不能为空！"
+		});
+	}
+	if(!req.body.name){
+		res.send({
+			code:2000,
+			msg:"栏目名称不能为空！"
+		});
+	}
 	res.send({
 		code:1000
 	})
