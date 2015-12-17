@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-
+var mongoose = require('mongoose');
+// mongoose.connect('mongodb://localhost/accounts');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
@@ -54,9 +55,47 @@ router.post('/columns',function(req,res,next){
 			msg:"栏目名称不能为空！"
 		});
 	}
-	res.send({
-		code:1000
-	})
+	// res.send({
+	// 	code:1000
+	// })
+  //保存
+  mongoose.connect('mongodb://localhost/column')
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', function() {
+    console.log('mongoose opened!');
+    var userSchema = new mongoose.Schema({
+        name:{type: String, unique: false}, 
+        // password:String
+      }, 
+      {collection: "column"}
+      );
+    var Column = mongoose.model('column', userSchema);
+
+    // User.findOne({name:"WangEr"}, function(err, doc){
+    //   if(err) console.log(err);
+    //   else console.log(doc.name + ", password - " + doc.password);
+    // });
+
+    // var lisi = new User({name:"LiSi", password:"123456"});
+    var data =new Column(req.body);
+    data.save(function(err, doc){
+      if(err){
+        console.log(err);
+      }else{
+        res.send({
+          code:1000,
+          msg:"保存成功!"
+        });
+      }
+    });  
+  });
+
+
+
+
+
+
 });
 router.get('/init_data',function(req,res,next){
 	res.send({
