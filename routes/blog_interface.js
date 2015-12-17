@@ -40,21 +40,6 @@ router.get('/articles', function(req, res, next) {
                         res.send(doc)
                     }
                 })
-                // var lisi = new User({name:"LiSi", password:"123456"});
-                // var data =new Column(req.body);
-                // data.save(function(err, doc){
-                //   if(err){
-                //     res.send({
-                //       code:2000,
-                //       msg:err
-                //     });
-                //   }else{
-                //     res.send({
-                //       code:1000,
-                //       msg:"保存成功!"
-                //     });
-                //   }
-                // });  
         });
 
 
@@ -78,7 +63,7 @@ router.get('/columns', function(req, res, next) {
     //  }
     // })
 
-    mongoose.connect('mongodb://localhost/column')
+    mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
@@ -113,9 +98,6 @@ router.get('/columns', function(req, res, next) {
         });
 
     });
-    // db.close(function(){
-    //   console.log("close mongodb connection!");
-    // })
 
 });
 //添加栏目
@@ -154,12 +136,7 @@ router.post('/columns', function(req, res, next) {
         });
         var Column = mongoose.model('column', userSchema);
 
-        // User.findOne({name:"WangEr"}, function(err, doc){
-        //   if(err) console.log(err);
-        //   else console.log(doc.name + ", password - " + doc.password);
-        // });
 
-        // var lisi = new User({name:"LiSi", password:"123456"});
         var data = new Column(req.body);
         data.save(function(err, doc) {
             if (err) {
@@ -175,11 +152,6 @@ router.post('/columns', function(req, res, next) {
             }
         });
     });
-
-
-
-
-
 
 });
 router.get('/init_data', function(req, res, next) {
