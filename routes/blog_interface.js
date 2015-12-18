@@ -1,6 +1,24 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+
+var userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        unique: false
+    },
+    pid:{
+      type:String,
+      unique:true
+    },
+    sort:Number,
+    seo_title:String,
+    keyword:String,
+    desc:String
+}, {
+    collection: "column"
+});
+var Column = mongoose.model('column', userSchema);
 // mongoose.connect('mongodb://localhost/accounts');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -8,7 +26,7 @@ router.get('/', function(req, res, next) {
 });
 router.get('/articles', function(req, res, next) {
 
-
+        // var mongoose = require('mongoose');
         mongoose.connect('mongodb://localhost/column')
         var db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
@@ -30,16 +48,16 @@ router.get('/articles', function(req, res, next) {
             //   else console.log(doc.name + ", password - " + doc.password);
             // });
             Column.find(function(err, doc) {
-                    if (err) {
-                        req.send({
-                            code: 2000,
-                            msg: err
-                        });
-                    } else {
+                if (err) {
+                    req.send({
+                        code: 2000,
+                        msg: err
+                    });
+                } else {
 
-                        res.send(doc)
-                    }
-                })
+                    res.send(doc)
+                }
+            })
         });
 
 
@@ -48,41 +66,11 @@ router.get('/articles', function(req, res, next) {
     })
     //获取栏目列表
 router.get('/columns', function(req, res, next) {
-    // res.send({
-    //  code:1000,
-    //  columns:{
-    //    id:1,
-    //    name:"测试",
-    //    created_at:"2015-11-29",
-    //    updated_at:"--"
-    //  },
-    //  meta:{
-    //    total_page:1,
-    //    current_page:1,
-    //    total_record:1
-    //  }
-    // })
-
     mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
         console.log('column list mongoose opened!');
-        var userSchema = new mongoose.Schema({
-            name: {
-                type: String,
-                unique: false
-            },
-            // password:String
-        }, {
-            collection: "column"
-        });
-        var Column = mongoose.model('column', userSchema);
-
-        // User.findOne({name:"WangEr"}, function(err, doc){
-        //   if(err) console.log(err);
-        //   else console.log(doc.name + ", password - " + doc.password);
-        // });
         Column.find(function(err, doc) {
             if (err) {
                 req.send({
@@ -91,53 +79,85 @@ router.get('/columns', function(req, res, next) {
                 });
             } else {
                 res.send({
-                  code:1000,
-                  columns:doc
+                    code: 1000,
+                    columns: doc
                 })
             }
+            db.close();
         });
 
     });
 
 });
-//添加栏目
+//查询栏目详情
+router.get('/columns/:id', function(req, res, next) {
+        var id = req.params.id;
+        if (!id) {
+            res.send({
+                code: 2000,
+                msg: "id不能为空！"
+            })
+        }
+        mongoose.connect('mongodb://localhost/column');
+        var db = mongoose.connection;
+        db.on('error', console.error.bind(console, 'connection error:'));
+        db.once('open', function() {
+            console.log('column mongoose opened!');
+            Column.findOne({
+                _id: id
+            }, function(err, doc) {
+                if (err) {
+                    req.send({
+                        code: 2000,
+                        msg: err
+                    });
+                } else {
+                    res.send({
+                        code: 1000,
+                        column: doc
+                    })
+                }
+                db.close();
+            });
+
+        });
+        // console.log(id);
+    })
+    //添加栏目
 router.post('/columns', function(req, res, next) {
     // console.log(req);
     console.log(req.body);
-    if (!req.body) {
+    var rData = req.body;
+    if (!rData) {
         res.send({
             code: 2000,
             msg: "提交数据不能为空！"
         });
     }
-    if (!req.body.name) {
+    if (!rData.name) {
         res.send({
             code: 2000,
             msg: "栏目名称不能为空！"
         });
     }
-    // res.send({
-    //  code:1000
-    // })
+    //父栏目
+
+    var saveData = {
+        pid: rData.parent_id||0,
+        name: rData.name,
+        sort: rData.sort,
+        seo_title: rData.seo_title,
+        keyword: rData.keyword,
+        desc: rData.desc
+    }
+
     //保存
-    mongoose.connect('mongodb://localhost/column')
+    mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
         console.log('mongoose opened!');
-        var userSchema = new mongoose.Schema({
-            name: {
-                type: String,
-                unique: false
-            },
-            // password:String
-        }, {
-            collection: "column"
-        });
-        var Column = mongoose.model('column', userSchema);
-
-
-        var data = new Column(req.body);
+        var data = new Column(saveData);
         data.save(function(err, doc) {
             if (err) {
                 res.send({
@@ -150,9 +170,51 @@ router.post('/columns', function(req, res, next) {
                     msg: "保存成功!"
                 });
             }
+            db.close();
         });
     });
 
+});
+//删除栏目
+router.delete('/columns/:id', function(req, res) {
+    // console.log(req)
+    var id = req.params.id;
+    mongoose.connect('mongodb://localhost/column');
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function() {
+        console.log('delete mongoose opened!');
+        Column.remove({
+                _id: id
+            }, function(err, doc) {
+                if (err) {
+                    res.send({
+                        code: 2000,
+                        msg: "删除失败！"
+                    })
+                } else {
+                    res.send({
+                        code: 1000
+                    })
+                }
+                db.close();
+            })
+            // var data = new Column(req.body);
+            // data.save(function(err, doc) {
+            //     if (err) {
+            //         res.send({
+            //             code: 2000,
+            //             msg: err
+            //         });
+            //     } else {
+            //         res.send({
+            //             code: 1000,
+            //             msg: "保存成功!"
+            //         });
+            //     }
+            //     db.close();
+            // });
+    });
 });
 router.get('/init_data', function(req, res, next) {
     res.send({
