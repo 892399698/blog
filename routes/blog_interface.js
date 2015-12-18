@@ -179,12 +179,13 @@ router.post('/columns', function(req, res, next) {
 //编辑栏目
 router.put('/columns/:id', function(req, res) {
     var rData = req.body;
-    if (!rData) {
+    if (!rData || !rData.column) {
         res.send({
             code: 2000,
             msg: "提交数据不能为空！"
         });
     }
+    rData = rData.column;
     if (!rData.name) {
         res.send({
             code: 2000,
