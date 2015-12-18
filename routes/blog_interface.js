@@ -7,14 +7,14 @@ var userSchema = new mongoose.Schema({
         type: String,
         unique: false
     },
-    pid:{
-      type:String,
-      unique:true
+    pid: {
+        type: String,
+        unique: true
     },
-    sort:Number,
-    seo_title:String,
-    keyword:String,
-    desc:String
+    sort: Number,
+    seo_title: String,
+    keyword: String,
+    desc: String
 }, {
     collection: "column"
 });
@@ -143,12 +143,13 @@ router.post('/columns', function(req, res, next) {
     //父栏目
 
     var saveData = {
-        pid: rData.parent_id||0,
+        parent_id: rData.parent_id || 0,
         name: rData.name,
         sort: rData.sort,
         seo_title: rData.seo_title,
         keyword: rData.keyword,
-        desc: rData.desc
+        desc: rData.desc,
+        created_at: (new Date()).getTime()
     }
 
     //保存
@@ -175,6 +176,59 @@ router.post('/columns', function(req, res, next) {
     });
 
 });
+//编辑栏目
+router.put('/columns/:id', function(req, res) {
+    var rData = req.body;
+    if (!rData) {
+        res.send({
+            code: 2000,
+            msg: "提交数据不能为空！"
+        });
+    }
+    if (!rData.name) {
+        res.send({
+            code: 2000,
+            msg: "栏目名称不能为空！"
+        });
+    }
+    //父栏目
+    var id = req.params._id;
+
+    var saveData = {
+        parent_id: rData.parent_id || 0,
+        name: rData.name,
+        sort: rData.sort,
+        seo_title: rData.seo_title,
+        keyword: rData.keyword,
+        desc: rData.desc,
+        updated_at: (new Date()).getTime()
+    }
+
+    //保存
+    mongoose.connect('mongodb://localhost/column');
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function() {
+        console.log('mongoose opened!');
+        // var data = new Column(saveData);
+        Column.update({
+            _id: id
+        }, saveData, function(err) {
+            if (err) {
+                res.send({
+                    code: 2000,
+                    msg: "更新失败！"
+                })
+            } else {
+                res.send({
+                    code: 1000
+                })
+            }
+            db.close();
+        });
+    });
+
+});
 //删除栏目
 router.delete('/columns/:id', function(req, res) {
     // console.log(req)
@@ -185,35 +239,20 @@ router.delete('/columns/:id', function(req, res) {
     db.once('open', function() {
         console.log('delete mongoose opened!');
         Column.remove({
-                _id: id
-            }, function(err, doc) {
-                if (err) {
-                    res.send({
-                        code: 2000,
-                        msg: "删除失败！"
-                    })
-                } else {
-                    res.send({
-                        code: 1000
-                    })
-                }
-                db.close();
-            })
-            // var data = new Column(req.body);
-            // data.save(function(err, doc) {
-            //     if (err) {
-            //         res.send({
-            //             code: 2000,
-            //             msg: err
-            //         });
-            //     } else {
-            //         res.send({
-            //             code: 1000,
-            //             msg: "保存成功!"
-            //         });
-            //     }
-            //     db.close();
-            // });
+            _id: id
+        }, function(err, doc) {
+            if (err) {
+                res.send({
+                    code: 2000,
+                    msg: "删除失败！"
+                })
+            } else {
+                res.send({
+                    code: 1000
+                })
+            }
+            db.close();
+        })
     });
 });
 router.get('/init_data', function(req, res, next) {
