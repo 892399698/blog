@@ -5,16 +5,18 @@ var mongoose = require('mongoose');
 var userSchema = new mongoose.Schema({
     name: {
         type: String,
-        unique: false
-    },
-    pid: {
-        type: String,
         unique: true
+    },
+    parent_id: {
+        type: String,
+        // unique: true
     },
     sort: Number,
     seo_title: String,
     keyword: String,
-    desc: String
+    desc: String,
+    created_at:Date,
+    // parent_id:Number
 }, {
     collection: "column"
 });
@@ -124,7 +126,7 @@ router.get('/columns/:id', function(req, res, next) {
         // console.log(id);
     })
     //添加栏目
-router.post('/columns', function(req, res, next) {
+router.post('/columns', function(req, res) {
     // console.log(req);
     console.log(req.body);
     var rData = req.body;
