@@ -15,7 +15,8 @@ var userSchema = new mongoose.Schema({
     seo_title: String,
     keyword: String,
     desc: String,
-    created_at:Date,
+    created_at:Number,
+    updated_at:Number,
     // parent_id:Number
 }, {
     collection: "column"
@@ -206,7 +207,7 @@ router.put('/columns/:id', function(req, res) {
         desc: rData.desc,
         updated_at: (new Date()).getTime()
     }
-
+    console.log(saveData.updated_at)
     //保存
     mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;

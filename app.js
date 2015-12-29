@@ -70,4 +70,5 @@ app.use(function(err, req, res, next) {
 app.listen('8089',function(){
   console.log("server start at port 8089!")
 })
+console.log("restart at:"+new Date())
 module.exports = app;
