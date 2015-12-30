@@ -15,8 +15,8 @@ var userSchema = new mongoose.Schema({
     seo_title: String,
     keyword: String,
     desc: String,
-    created_at:Number,
-    updated_at:Number,
+    created_at:Date,
+    updated_at:Date,
     // parent_id:Number
 }, {
     collection: "column"
@@ -152,7 +152,8 @@ router.post('/columns', function(req, res) {
         seo_title: rData.seo_title,
         keyword: rData.keyword,
         desc: rData.desc,
-        created_at: (new Date()).getTime()
+        created_at: (new Date()),
+        updated_at: (new Date()),
     }
 
     //保存
