@@ -152,7 +152,8 @@ router.post('/columns', function(req, res) {
         seo_title: rData.seo_title,
         keyword: rData.keyword,
         desc: rData.desc,
-        created_at: (new Date())
+        created_at: (new Date()),
+        updated_at: (new Date()),
     }
 
     //保存
