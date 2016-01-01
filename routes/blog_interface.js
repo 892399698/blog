@@ -11,12 +11,12 @@ var userSchema = new mongoose.Schema({
         type: String,
         // unique: true
     },
-    sort: Number,
+    sort: String,
     seo_title: String,
     keyword: String,
     desc: String,
-    created_at:Number,
-    updated_at:Number,
+    created_at:Date,
+    updated_at:Date,
     // parent_id:Number
 }, {
     collection: "column"
@@ -152,7 +152,7 @@ router.post('/columns', function(req, res) {
         seo_title: rData.seo_title,
         keyword: rData.keyword,
         desc: rData.desc,
-        created_at: (new Date()).getTime()
+        created_at: (new Date())
     }
 
     //保存
@@ -196,7 +196,7 @@ router.put('/columns/:id', function(req, res) {
         });
     }
     //父栏目
-    var id = req.params._id;
+    var id = req.params.id;
 
     var saveData = {
         parent_id: rData.parent_id || 0,
@@ -205,9 +205,8 @@ router.put('/columns/:id', function(req, res) {
         seo_title: rData.seo_title,
         keyword: rData.keyword,
         desc: rData.desc,
-        updated_at: (new Date()).getTime()
+        updated_at: (new Date())
     }
-    console.log(saveData.updated_at)
     //保存
     mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;
@@ -215,9 +214,10 @@ router.put('/columns/:id', function(req, res) {
     db.once('open', function() {
         console.log('mongoose opened!');
         // var data = new Column(saveData);
+        console.log(id)
         Column.update({
             _id: id
-        }, saveData, function(err) {
+        }, {$set:saveData}, function(err) {
             if (err) {
                 res.send({
                     code: 2000,
