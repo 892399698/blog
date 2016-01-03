@@ -3,7 +3,6 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color:#F2F2F2;
 }
-
 a {
   color: #00B7FF;
 }
@@ -16,12 +15,91 @@ a {
   margin-left:auto;
   margin-right:auto;
 }
-
-.list-1{
-	background-color:#FFF;
+.list li{
+	list-style: none;
+}
+.list-1,.list-2,.list-3{
+	margin:0;
+	-webkit-padding-start: 0;
+	font-size:14px;
+}
+.list-1 h2{
+	font-size:18px;
+}
+.list-1 h2 a{
+	color:#333;
+}
+.list-1 li,.list-2 li{
+	list-style: none;
+}
+/*.list-1{
+}*/
+.list-1 li{
 	padding:36px 30px;
+	margin-bottom:20px;
+	background-color:#FFF;
 }
 .list-1 .img,.list-2 .img{
 	width:100%;
 	display: block;
 }
+.list-1 .info{
+	margin-bottom: 10px;
+}
+.list-1 .info>span,.list-1 .info>a{
+	margin-right:10px;
+}
+.list-1 .info .fa{
+	margin-right:4px;
+}
+.list-2 li{
+	padding:20px 0;
+	border-bottom:1px dashed #EEE;
+}
+.list-2 li:last-child{
+	border:none;
+}
+.list-2 h4{
+	margin:0 0 10px;
+	font-size:14px;
+}
+.list-2 .fa{
+	margin-right:4px;
+}
+.list-2 .info{
+	font-size:12px;
+}
+
+.fs-12{
+	font-size:12px;
+}
+.list-3{
+
+}
+.list-3 li{
+	padding:10px 0;
+	border-bottom:1px dashed #eee;
+}
+.list-3 li:last-child{
+	border:none;
+}
+
+
+.mgl-10{
+	margin-left:10px;
+}
+.footer{
+	background-color:#FFF;
+}
+.footer .pull-right{
+	margin-top:15px;
+}
+.footer .c-row{
+	padding:20px;
+	color:#666;
+}
+/*分页*/
+.page .pagination > li > a{
+	background-color:#FFF;
+}
+/*分页end*/

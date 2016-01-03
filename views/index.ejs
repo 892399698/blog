@@ -6,6 +6,7 @@
     <link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css' />
     <link rel='stylesheet' href='/font-awesome/css/font-awesome.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap-reset.css' />
   </head>
   <body>
     <% include public/header.ejs %>
@@ -15,18 +16,42 @@
       <div class="row">
         <div class="col-xs-8">
           <ul class="list-1">
-            <li class="">
+            <li>
                 <p><a href=""><img class="img" src="http://demo.awethemes.com/thefamly/wp-content/uploads/2015/06/42.jpg"></a></p>
-                <h2 class="title">欢迎来到我的博客！</h2>
-                <div class="info"><a href="">栏目</a><span><i class="fa fa-clock-o"></i>2016-01-03</span><span><a><i class="icon-comment"></i>12</a></span></div>
+                <h2 class="title"><a href="">欢迎来到我的博客！</a></h2>
+                <div class="info"><a href="">栏目</a><span><a><i class="fa fa-comment"></i>12</a></span><span><i class="fa fa-clock-o"></i>2016-01-03</span></div>
+                <div class="desc">
+                  <p>这是一个关于我的博客，技术/生活都有涉及，欢迎大家常来光顾。</p>
+                  <p class="text-right"><a href="">查看全文</a></p>
+                </div>
+            </li>
+            <li>
+                <p><a href=""><img class="img" src="http://demo.awethemes.com/thefamly/wp-content/uploads/2015/06/42.jpg"></a></p>
+                <h2 class="title"><a href="">欢迎来到我的博客！</a></h2>
+                <div class="info"><a href="">栏目</a><span><a><i class="fa fa-comment"></i>12</a></span><span><i class="fa fa-clock-o"></i>2016-01-03</span></div>
                 <div class="desc">
                   <p>这是一个关于我的博客，技术/生活都有涉及，欢迎大家常来光顾。</p>
                   <p class="text-right"><a href="">查看全文</a></p>
                 </div>
             </li>
           </ul>
+          <!-- 分页 -->
+          <div class="page">
+            <ul class="pagination">
+                <li><a href="#">«</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">»</a></li>
+            </ul>
+          </div>
+          <!-- 分页 end-->
+
         </div>
         <div class="col-xs-4">
+        <!-- 最近更新 -->
           <div class="panel">
             <div class="panel-heading">最近更新</div>
             <div class="panel-body">
@@ -34,7 +59,16 @@
                 <li class="clearfix">
                     <div class="col-md-8">
                       <h4><a href="">今天去哪学习前端？</a></h4>
-                      <p><a href=""><span><i class="fa fa-comment"></i>20</span></a></p>
+                      <p class="info"><a href=""><span><i class="fa fa-comment"></i>20</span></a></p>
+                    </div>
+                    <div class="col-md-4">
+                      <img class="img" src="http://demo.awethemes.com/thefamly/wp-content/uploads/2015/06/42.jpg">
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="col-md-8">
+                      <h4><a href="">今天去哪学习前端？</a></h4>
+                      <p class="info"><a href=""><span><i class="fa fa-comment"></i>20</span></a></p>
                     </div>
                     <div class="col-md-4">
                       <img class="img" src="http://demo.awethemes.com/thefamly/wp-content/uploads/2015/06/42.jpg">
@@ -43,6 +77,36 @@
               </ul>
             </div>
           </div>
+        <!-- 最近更新 end -->
+        <!-- 微博 -->
+        <div class="panel">
+          <div class="panel-heading">微博<a href="" class="pull-right fs-12">更多&gt;&gt;</a></div>
+          <div class="panel-body">
+            <ul class="list list-3">
+              <li>
+                <p>【致敬英雄！】这是美国新年夜的一个英雄，大家都在欢庆新年的时候，他却因电梯故障意外去世，事发时他将另一名女子推出电梯，对她说了最后一句话：“新年快乐”，一句令人心碎的新年祝福。</p>
+                <p class="text-right"><a href="" class="fs-12">查看</a>&nbsp;&nbsp;<a href="" class="fs-12">评论(13)</a></p>
+              </li>
+              <li>
+                <p>【致敬英雄！】这是美国新年夜的一个英雄，大家都在欢庆新年的时候，他却因电梯故障意外去世，事发时他将另一名女子推出电梯，对她说了最后一句话：“新年快乐”，一句令人心碎的新年祝福。</p>
+                <p class="text-right"><a href="" class="fs-12">查看</a>&nbsp;&nbsp;<a href="" class="fs-12">评论(20)</a></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- 微博 end -->
+        <!-- 博客档案 -->
+        <div class="panel">
+          <div class="panel-heading">博客档案</div>
+          <div class="panel-body">
+            <ul class="list list-3">
+              <li>&gt;<a class="mgl-10" href="">2016年1月</a></li>
+              <li>&gt;<a class="mgl-10" href="">2016年2月</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- 博客档案 end -->
+
         </div>
       </div>
 
@@ -52,5 +116,6 @@
     
     <script type="text/javascript">
     </script>
+    <% include public/footer.ejs %>
   </body>
 </html>
