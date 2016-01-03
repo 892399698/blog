@@ -1,27 +1,28 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-
-var userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        unique: true
-    },
-    parent_id: {
-        type: String,
-        // unique: true
-    },
-    sort: String,
-    seo_title: String,
-    keyword: String,
-    desc: String,
-    created_at:Date,
-    updated_at:Date,
-    // parent_id:Number
-}, {
-    collection: "column"
-});
-var Column = mongoose.model('column', userSchema);
+var Column=require('../models/column');
+var pinyin=require('pinyin');
+// var userSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         unique: true
+//     },
+//     parent_id: {
+//         type: String,
+//         // unique: true
+//     },
+//     sort: String,
+//     seo_title: String,
+//     keyword: String,
+//     desc: String,
+//     created_at:Date,
+//     updated_at:Date,
+//     // parent_id:Number
+// }, {
+//     collection: "column"
+// });
+// var Column = mongoose.model('column', userSchema);
 // mongoose.connect('mongodb://localhost/accounts');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -35,15 +36,15 @@ router.get('/articles', function(req, res, next) {
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function() {
             console.log('column list mongoose opened!');
-            var userSchema = new mongoose.Schema({
-                name: {
-                    type: String,
-                    unique: false
-                },
-                // password:String
-            }, {
-                collection: "column"
-            });
+            // var userSchema = new mongoose.Schema({
+            //     name: {
+            //         type: String,
+            //         unique: false
+            //     },
+            //     // password:String
+            // }, {
+            //     collection: "column"
+            // });
             var Column = mongoose.model('column', userSchema);
 
             // User.findOne({name:"WangEr"}, function(err, doc){
@@ -144,7 +145,7 @@ router.post('/columns', function(req, res) {
         });
     }
     //父栏目
-
+    var link='/'+pinyin(rDate.name);
     var saveData = {
         parent_id: rData.parent_id || 0,
         name: rData.name,
@@ -154,6 +155,7 @@ router.post('/columns', function(req, res) {
         desc: rData.desc,
         created_at: (new Date()),
         updated_at: (new Date()),
+        link:link
     }
 
     //保存
