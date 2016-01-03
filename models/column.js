@@ -15,7 +15,11 @@ var userSchema = new mongoose.Schema({
     created_at:Date,
     updated_at:Date,
     children:[],
-    link:String
+    link:String,
+    article_count:{
+        type:Number,
+        default:0
+    }
     // parent_id:Number
 }, {
     collection: "column"

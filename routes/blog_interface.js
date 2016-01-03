@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Column=require('../models/column');
+var Article=require('../models/article');
 var pinyin=require('pinyin');
 // var userSchema = new mongoose.Schema({
 //     name: {
@@ -28,46 +29,67 @@ var pinyin=require('pinyin');
 router.get('/', function(req, res, next) {
     res.send('respond with a resource');
 });
-router.get('/articles', function(req, res, next) {
-
-        // var mongoose = require('mongoose');
-        mongoose.connect('mongodb://localhost/column')
-        var db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'connection error:'));
-        db.once('open', function() {
-            console.log('column list mongoose opened!');
-            // var userSchema = new mongoose.Schema({
-            //     name: {
-            //         type: String,
-            //         unique: false
-            //     },
-            //     // password:String
-            // }, {
-            //     collection: "column"
-            // });
-            var Column = mongoose.model('column', userSchema);
-
-            // User.findOne({name:"WangEr"}, function(err, doc){
-            //   if(err) console.log(err);
-            //   else console.log(doc.name + ", password - " + doc.password);
-            // });
-            Column.find(function(err, doc) {
-                if (err) {
-                    req.send({
-                        code: 2000,
-                        msg: err
-                    });
-                } else {
-
-                    res.send(doc)
-                }
-            })
-        });
-
-
-
-
+router.get('/articles/:id',function(req,res){
+    var id = req.params.id;
+    if (!id) {
+        res.send({
+            code: 2000,
+            msg: "id不能为空！"
+        })
+    }
+    mongoose.connect('mongodb://localhost/article');
+    var db=mongoose.connection;
+    db.on('error',console.error.bind(console,'connection error:'));
+    db.once('open',function(){
+        console.log('article list mongoose opened!');
+        Article.find(function(err,doc){
+            if(err){
+                res.send({
+                    code:2000,
+                    msg:err
+                })
+            }else{
+                res.send({
+                    code:1000,
+                    articles:doc
+                })
+            }
+            db.close();
+        })
     })
+})
+// router.get('/articles', function(req, res, next) {
+
+//         // var mongoose = require('mongoose');
+//         mongoose.connect('mongodb://localhost/column')
+//         var db = mongoose.connection;
+//         db.on('error', console.error.bind(console, 'connection error:'));
+//         db.once('open', function() {
+//             console.log('column list mongoose opened!');
+
+//             var Column = mongoose.model('column', userSchema);
+
+//             // User.findOne({name:"WangEr"}, function(err, doc){
+//             //   if(err) console.log(err);
+//             //   else console.log(doc.name + ", password - " + doc.password);
+//             // });
+//             Column.find(function(err, doc) {
+//                 if (err) {
+//                     req.send({
+//                         code: 2000,
+//                         msg: err
+//                     });
+//                 } else {
+
+//                     res.send(doc)
+//                 }
+//             })
+//         });
+
+
+
+
+//     })
     //获取栏目列表
 router.get('/columns', function(req, res, next) {
     mongoose.connect('mongodb://localhost/column');
