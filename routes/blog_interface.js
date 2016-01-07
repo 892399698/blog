@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Column=require('../models/column');
 var Article=require('../models/article');
 var pinyin=require('pinyin');
+var fs=require('fs');
 // var userSchema = new mongoose.Schema({
 //     name: {
 //         type: String,
@@ -295,6 +296,18 @@ router.get('/init_data', function(req, res, next) {
             current_page: 1,
             total_record: 1
         }
+    })
+})
+
+//图片上传
+router.post('/upload_img',function(req,res){
+    console.log(req.files)
+    console.log('=======')
+    console.log(req.body)
+    res.send({
+        attachment_id: 4,
+        src: "http://qnudeskpub.flyudesk.com/[@BVB3V$FD]38]9[6P23JLL-1448533040-1452154078.gif",
+        success: true
     })
 })
 module.exports = router;
