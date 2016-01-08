@@ -5,6 +5,9 @@ var Column=require('../models/column');
 var Article=require('../models/article');
 var pinyin=require('pinyin');
 var fs=require('fs');
+var multiparty=require('connect-multiparty');
+var multipartyMiddleware=multiparty();
+
 // var userSchema = new mongoose.Schema({
 //     name: {
 //         type: String,
@@ -300,10 +303,8 @@ router.get('/init_data', function(req, res, next) {
 })
 
 //图片上传
-router.post('/upload_img',function(req,res){
-    console.log(req.files)
-    console.log('=======')
-    console.log(req.body)
+router.post('/upload_img',multipartyMiddleware,function(req,res){
+    console.log(req.body, req.files);
     res.send({
         attachment_id: 4,
         src: "http://qnudeskpub.flyudesk.com/[@BVB3V$FD]38]9[6P23JLL-1448533040-1452154078.gif",
