@@ -5,8 +5,9 @@ var Column=require('../models/column');
 var Article=require('../models/article');
 var pinyin=require('pinyin');
 var fs=require('fs');
-var multiparty=require('connect-multiparty');
-var multipartyMiddleware=multiparty();
+var multiparty=require('multiparty');
+var crypto = require('crypto');
+// var multipartyMiddleware=multiparty();
 
 // var userSchema = new mongoose.Schema({
 //     name: {
@@ -30,6 +31,16 @@ var multipartyMiddleware=multiparty();
 // var Column = mongoose.model('column', userSchema);
 // mongoose.connect('mongodb://localhost/accounts');
 /* GET users listing. */
+function md5(content){
+    var content = content;
+    if(!content){
+        return content;
+    }
+    var md5 = crypto.createHash('md5');
+    md5.update(content);
+    var d = md5.digest("hex");
+    return d;
+}
 router.get('/', function(req, res, next) {
     res.send('respond with a resource');
 });
@@ -303,12 +314,58 @@ router.get('/init_data', function(req, res, next) {
 })
 
 //图片上传
-router.post('/upload_img',multipartyMiddleware,function(req,res){
-    console.log(req.body, req.files);
-    res.send({
-        attachment_id: 4,
-        src: "http://qnudeskpub.flyudesk.com/[@BVB3V$FD]38]9[6P23JLL-1448533040-1452154078.gif",
-        success: true
-    })
+router.post('/upload_img',function(req,res){
+    // console.log(req.body, req.files);
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+          // res.writeHead(200, {'content-type': 'text/plain'});
+          // res.write('received upload:\n\n');
+          // res.end(util.inspect({fields: fields, files: files}));
+          console.log(fields,files.file);
+          var tmpPath = files.file[0].path;
+          var basePath=__dirname+'/../public/uploads/';
+          var originalFilename=files.file[0].originalFilename;
+          var imgNameSplit=originalFilename.split(".");
+          var l=imgNameSplit.length;
+
+          var ex=imgNameSplit[l-1];
+
+          var fileName=md5(imgNameSplit[0])+(new Date()).getTime()+"."+ex;
+          var targetPath = basePath + files.file[0].fieldName+fileName;
+          console.log(targetPath)
+          console.log(tmpPath)
+
+          fs.exists(basePath, function(exists){
+            if(!exists){
+                fs.mkdirSync(basePath,"666");
+            }
+            fs.rename(tmpPath,targetPath,function(){
+                if(err) {
+                    res.send({
+                        src:"",
+                        msg:err,
+                        success:false
+                    })
+                }
+                res.send({
+                    src:"/public/uploads/"+files.file[0].fieldName+fileName,
+                    success:true
+                })
+            })
+
+
+
+          })
+        // res.send({
+        //     attachment_id: 4,
+        //     src: "http://qnudeskpub.flyudesk.com/[@BVB3V$FD]38]9[6P23JLL-1448533040-1452154078.gif",
+        //     success: true
+        // })
+    });
+    // res.send({
+    //     attachment_id: 4,
+    //     src: "http://qnudeskpub.flyudesk.com/[@BVB3V$FD]38]9[6P23JLL-1448533040-1452154078.gif",
+    //     success: true
+    // })
 })
 module.exports = router;
