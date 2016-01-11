@@ -348,8 +348,16 @@ router.post('/upload_img',function(req,res){
                     })
                 }
                 res.send({
-                    src:"/public/uploads/"+files.file[0].fieldName+fileName,
+                    src:"/uploads/"+files.file[0].fieldName+fileName,
                     success:true
+                })
+                //删除临时文件
+                fs.unlink(tmpPath, function(){
+                    if(err) {
+                        console.log('删除临时文件失败！')
+                        throw err;
+                    }
+                    
                 })
             })
 
