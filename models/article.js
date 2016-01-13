@@ -5,9 +5,13 @@ var userSchema = new mongoose.Schema({
     updated_at:Date,
     column_id:String,
     click:Number,
-    HTML:Number,
+    // HTML:Number,
+    flag:[],
     status:Number,
-    editor:String
+    // editor:String,
+    keyword:String,
+    description:String,
+    body:String
     // parent_id:Number
 }, {
     collection: "article"

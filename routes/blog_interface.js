@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var Column=require('../models/column');
-var Article=require('../models/article');
-var pinyin=require('pinyin');
-var fs=require('fs');
-var multiparty=require('multiparty');
+var Column = require('../models/column');
+var Article = require('../models/article');
+var pinyin = require('pinyin');
+var fs = require('fs');
+var multiparty = require('multiparty');
 var crypto = require('crypto');
 // var multipartyMiddleware=multiparty();
 
@@ -31,9 +31,9 @@ var crypto = require('crypto');
 // var Column = mongoose.model('column', userSchema);
 // mongoose.connect('mongodb://localhost/accounts');
 /* GET users listing. */
-function md5(content){
+function md5(content) {
     var content = content;
-    if(!content){
+    if (!content) {
         return content;
     }
     var md5 = crypto.createHash('md5');
@@ -44,36 +44,94 @@ function md5(content){
 router.get('/', function(req, res, next) {
     res.send('respond with a resource');
 });
-router.get('/articles/:id',function(req,res){
-    var id = req.params.id;
-    if (!id) {
-        res.send({
-            code: 2000,
-            msg: "id不能为空！"
-        })
+//添加文章
+router.post('/articles', function(req, res) {
+    var rData = req.body.article,
+        msg='';
+        console.log(rData)
+    if (!rData) {
+        msg="提交数据不能为空！";
+    }else if (!rData.title) {
+        msg="文章标题不能为空！";
+    }else if (!rData.column_id) {
+        msg="栏目不能为空！";
+    }else if (!rData.body) {
+        msg="内容不能为空！";
     }
+    if(msg){
+        res.send({
+            code:2000,
+            msg:msg
+        })
+        return false;
+    }
+    //父栏目
+    var time=new Date();
+    var saveData = {
+        title: rData.title,
+        keyword:rData.keyword,
+        description:rData.description,
+        flag:rData.flag,
+        click:rData.click,
+        state:rData.state,
+        body:rData.body,
+        created_at: time,
+        updated_at: time
+    }
+
     mongoose.connect('mongodb://localhost/article');
     var db=mongoose.connection;
-    db.on('error',console.error.bind(console,'connection error:'));
+    db.on('error',console.error.bind(console, 'connection error:'));
     db.once('open',function(){
-        console.log('article list mongoose opened!');
-        Article.find(function(err,doc){
-            if(err){
+        console.log('article mongoose opened!');
+        var data = new Article(saveData);
+        data.save(function(err, doc) {
+            if (err) {
                 res.send({
-                    code:2000,
-                    msg:err
-                })
-            }else{
+                    code: 2000,
+                    msg: err
+                });
+            } else {
                 res.send({
-                    code:1000,
-                    articles:doc
-                })
+                    code: 1000,
+                    msg: "保存成功!"
+                });
             }
             db.close();
+        });
+    })
+
+})
+router.get('/articles/:id', function(req, res) {
+        var id = req.params.id;
+        if (!id) {
+            res.send({
+                code: 2000,
+                msg: "id不能为空！"
+            })
+        }
+        mongoose.connect('mongodb://localhost/article');
+        var db = mongoose.connection;
+        db.on('error', console.error.bind(console, 'connection error:'));
+        db.once('open', function() {
+            console.log('article list mongoose opened!');
+            Article.find(function(err, doc) {
+                if (err) {
+                    res.send({
+                        code: 2000,
+                        msg: err
+                    })
+                } else {
+                    res.send({
+                        code: 1000,
+                        articles: doc
+                    })
+                }
+                db.close();
+            })
         })
     })
-})
-// router.get('/articles', function(req, res, next) {
+    // router.get('/articles', function(req, res, next) {
 
 //         // var mongoose = require('mongoose');
 //         mongoose.connect('mongodb://localhost/column')
@@ -105,7 +163,7 @@ router.get('/articles/:id',function(req,res){
 
 
 //     })
-    //获取栏目列表
+//获取栏目列表
 router.get('/columns', function(req, res, next) {
     mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;
@@ -167,7 +225,7 @@ router.get('/columns/:id', function(req, res, next) {
     //添加栏目
 router.post('/columns', function(req, res) {
     // console.log(req);
-    console.log(req.body);
+    // console.log(req.body);
     var rData = req.body;
     if (!rData) {
         res.send({
@@ -182,7 +240,7 @@ router.post('/columns', function(req, res) {
         });
     }
     //父栏目
-    var link='/'+pinyin(rDate.name);
+    var link = '/' + pinyin(rDate.name);
     var saveData = {
         parent_id: rData.parent_id || 0,
         name: rData.name,
@@ -192,7 +250,7 @@ router.post('/columns', function(req, res) {
         desc: rData.desc,
         created_at: (new Date()),
         updated_at: (new Date()),
-        link:link
+        link: link
     }
 
     //保存
@@ -239,15 +297,15 @@ router.put('/columns/:id', function(req, res) {
     var id = req.params.id;
 
     var saveData = {
-        parent_id: rData.parent_id || 0,
-        name: rData.name,
-        sort: rData.sort,
-        seo_title: rData.seo_title,
-        keyword: rData.keyword,
-        desc: rData.desc,
-        updated_at: (new Date())
-    }
-    //保存
+            parent_id: rData.parent_id || 0,
+            name: rData.name,
+            sort: rData.sort,
+            seo_title: rData.seo_title,
+            keyword: rData.keyword,
+            desc: rData.desc,
+            updated_at: (new Date())
+        }
+        //保存
     mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
@@ -257,7 +315,9 @@ router.put('/columns/:id', function(req, res) {
         console.log(id)
         Column.update({
             _id: id
-        }, {$set:saveData}, function(err) {
+        }, {
+            $set: saveData
+        }, function(err) {
             if (err) {
                 res.send({
                     code: 2000,
@@ -314,61 +374,61 @@ router.get('/init_data', function(req, res, next) {
 })
 
 //图片上传
-router.post('/upload_img',function(req,res){
+router.post('/upload_img', function(req, res) {
     // console.log(req.body, req.files);
     var form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
-          // res.writeHead(200, {'content-type': 'text/plain'});
-          // res.write('received upload:\n\n');
-          // res.end(util.inspect({fields: fields, files: files}));
-          console.log(fields,files.file);
-          var tmpPath = files.file[0].path;
-          var basePath=__dirname+'/../public/uploads/';
-          var originalFilename=files.file[0].originalFilename;
-          var imgNameSplit=originalFilename.split(".");
-          var l=imgNameSplit.length;
+        // res.writeHead(200, {'content-type': 'text/plain'});
+        // res.write('received upload:\n\n');
+        // res.end(util.inspect({fields: fields, files: files}));
+        console.log(fields, files.file);
+        var tmpPath = files.file[0].path;
+        var basePath = __dirname + '/../public/uploads/';
+        var originalFilename = files.file[0].originalFilename;
+        var imgNameSplit = originalFilename.split(".");
+        var l = imgNameSplit.length;
 
-          var ex=imgNameSplit[l-1];
+        var ex = imgNameSplit[l - 1];
 
-          var fileName=md5(imgNameSplit[0])+(new Date()).getTime()+"."+ex;
-          var targetPath = basePath + files.file[0].fieldName+fileName;
-          console.log(targetPath)
-          console.log(tmpPath)
+        var fileName = md5(imgNameSplit[0]) + (new Date()).getTime() + "." + ex;
+        var targetPath = basePath + files.file[0].fieldName + fileName;
+        console.log(targetPath)
+        console.log(tmpPath)
 
-          fs.exists(basePath, function(exists){
-            if(!exists){
-                fs.mkdirSync(basePath,"666");
-            }
-            fs.rename(tmpPath,targetPath,function(){
-                if(err) {
-                    res.send({
-                        src:"",
-                        msg:err,
-                        success:false
-                    })
+        fs.exists(basePath, function(exists) {
+                if (!exists) {
+                    fs.mkdirSync(basePath, "666");
                 }
-                res.send({
-                    src:"/uploads/"+files.file[0].fieldName+fileName,
-                    success:true
-                })
-                //删除临时文件
-                fs.unlink(tmpPath, function(){
-                    if(err) {
-                        console.log('删除临时文件失败！')
-                        throw err;
+                fs.rename(tmpPath, targetPath, function() {
+                    if (err) {
+                        res.send({
+                            src: "",
+                            msg: err,
+                            success: false
+                        })
                     }
-                    
+                    res.send({
+                            src: "/uploads/" + files.file[0].fieldName + fileName,
+                            success: true
+                        })
+                        //删除临时文件
+                    fs.unlink(tmpPath, function() {
+                        if (err) {
+                            console.log('删除临时文件失败！')
+                            throw err;
+                        }
+
+                    })
                 })
+
+
+
             })
-
-
-
-          })
-        // res.send({
-        //     attachment_id: 4,
-        //     src: "http://qnudeskpub.flyudesk.com/[@BVB3V$FD]38]9[6P23JLL-1448533040-1452154078.gif",
-        //     success: true
-        // })
+            // res.send({
+            //     attachment_id: 4,
+            //     src: "http://qnudeskpub.flyudesk.com/[@BVB3V$FD]38]9[6P23JLL-1448533040-1452154078.gif",
+            //     success: true
+            // })
     });
     // res.send({
     //     attachment_id: 4,
