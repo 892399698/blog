@@ -102,9 +102,10 @@ router.post('/articles', function(req, res) {
     })
 
 })
-router.get('/articles/:id', function(req, res) {
-        var id = req.params.id;
-        if (!id) {
+router.get('/articles', function(req, res) {
+        var column_id = req.query.column_id;
+        console.log(column_id)
+        if (!column_id) {
             res.send({
                 code: 2000,
                 msg: "id不能为空！"
@@ -115,7 +116,9 @@ router.get('/articles/:id', function(req, res) {
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function() {
             console.log('article list mongoose opened!');
-            Article.find(function(err, doc) {
+            Article.findOne({
+                column_id:column_id
+            },function(err, doc) {
                 if (err) {
                     res.send({
                         code: 2000,
