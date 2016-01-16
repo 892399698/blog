@@ -4,7 +4,10 @@ var userSchema = new mongoose.Schema({
     created_at:Date,
     updated_at:Date,
     column_id:String,
-    click:Number,
+    click:{
+        type:Number,
+        default:0
+    },
     // HTML:Number,
     flag:[],
     status:Number,
