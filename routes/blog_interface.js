@@ -70,6 +70,7 @@ router.post('/articles', function(req, res) {
     var saveData = {
         title: rData.title,
         keyword:rData.keyword,
+        column_id:rData.column_id,
         description:rData.description,
         flag:rData.flag,
         click:rData.click,
@@ -104,7 +105,8 @@ router.post('/articles', function(req, res) {
 })
 router.get('/articles', function(req, res) {
         var column_id = req.query.column_id;
-        console.log(column_id)
+        // console.log(column_id)
+        // console.log("+++++++++++")
         if (!column_id) {
             res.send({
                 code: 2000,
@@ -116,7 +118,7 @@ router.get('/articles', function(req, res) {
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function() {
             console.log('article list mongoose opened!');
-            Article.findOne({
+            Article.find({
                 column_id:column_id
             },function(err, doc) {
                 if (err) {
