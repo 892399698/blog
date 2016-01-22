@@ -47,43 +47,43 @@ router.get('/', function(req, res, next) {
 //添加文章
 router.post('/articles', function(req, res) {
     var rData = req.body.article,
-        msg='';
-        console.log(rData)
+        msg = '';
+    console.log(rData)
     if (!rData) {
-        msg="提交数据不能为空！";
-    }else if (!rData.title) {
-        msg="文章标题不能为空！";
-    }else if (!rData.column_id) {
-        msg="栏目不能为空！";
-    }else if (!rData.body) {
-        msg="内容不能为空！";
+        msg = "提交数据不能为空！";
+    } else if (!rData.title) {
+        msg = "文章标题不能为空！";
+    } else if (!rData.column_id) {
+        msg = "栏目不能为空！";
+    } else if (!rData.body) {
+        msg = "内容不能为空！";
     }
-    if(msg){
+    if (msg) {
         res.send({
-            code:2000,
-            msg:msg
+            code: 2000,
+            msg: msg
         })
         return false;
     }
     //父栏目
-    var time=new Date();
+    var time = new Date();
     var saveData = {
         title: rData.title,
-        keyword:rData.keyword,
-        column_id:rData.column_id,
-        description:rData.description,
-        flag:rData.flag,
-        click:rData.click,
-        state:rData.state,
-        body:rData.body,
+        keyword: rData.keyword,
+        column_id: rData.column_id,
+        description: rData.description,
+        flag: rData.flag,
+        click: rData.click,
+        state: rData.state,
+        body: rData.body,
         created_at: time,
         updated_at: time
     }
 
     mongoose.connect('mongodb://localhost/article');
-    var db=mongoose.connection;
-    db.on('error',console.error.bind(console, 'connection error:'));
-    db.once('open',function(){
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function() {
         console.log('article mongoose opened!');
         var data = new Article(saveData);
         data.save(function(err, doc) {
@@ -104,10 +104,43 @@ router.post('/articles', function(req, res) {
 
 })
 router.get('/articles', function(req, res) {
-        var column_id = req.query.column_id;
-        // console.log(column_id)
-        // console.log("+++++++++++")
-        if (!column_id) {
+    var column_id = req.query.column_id;
+    // console.log(column_id)
+    // console.log("+++++++++++")
+    if (!column_id) {
+        res.send({
+            code: 2000,
+            msg: "栏目id不能为空！"
+        })
+    }
+    mongoose.connect('mongodb://localhost/article');
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function() {
+        console.log('article list mongoose opened!');
+        Article.find({
+            column_id: column_id
+        }, function(err, doc) {
+            if (err) {
+                res.send({
+                    code: 2000,
+                    msg: err
+                })
+            } else {
+                res.send({
+                    code: 1000,
+                    articles: doc
+                })
+            }
+            db.close();
+        })
+    })
+})
+
+router.get('/articles/:id', function(req, res) {
+        var id = req.params.id;
+        console.log(id)
+        if (!id) {
             res.send({
                 code: 2000,
                 msg: "id不能为空！"
@@ -118,57 +151,27 @@ router.get('/articles', function(req, res) {
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function() {
             console.log('article list mongoose opened!');
-            Article.find({
-                column_id:column_id
-            },function(err, doc) {
+            Article.findOne({
+                _id: id
+            }, function(err, doc) {
                 if (err) {
                     res.send({
                         code: 2000,
                         msg: err
                     })
                 } else {
+                    doc.id=doc._id
+                    console.log(doc)
                     res.send({
                         code: 1000,
-                        articles: doc
+                        article: doc
                     })
                 }
                 db.close();
             })
         })
     })
-    // router.get('/articles', function(req, res, next) {
-
-//         // var mongoose = require('mongoose');
-//         mongoose.connect('mongodb://localhost/column')
-//         var db = mongoose.connection;
-//         db.on('error', console.error.bind(console, 'connection error:'));
-//         db.once('open', function() {
-//             console.log('column list mongoose opened!');
-
-//             var Column = mongoose.model('column', userSchema);
-
-//             // User.findOne({name:"WangEr"}, function(err, doc){
-//             //   if(err) console.log(err);
-//             //   else console.log(doc.name + ", password - " + doc.password);
-//             // });
-//             Column.find(function(err, doc) {
-//                 if (err) {
-//                     req.send({
-//                         code: 2000,
-//                         msg: err
-//                     });
-//                 } else {
-
-//                     res.send(doc)
-//                 }
-//             })
-//         });
-
-
-
-
-//     })
-//获取栏目列表
+    //获取栏目列表
 router.get('/columns', function(req, res, next) {
     mongoose.connect('mongodb://localhost/column');
     var db = mongoose.connection;
@@ -245,7 +248,7 @@ router.post('/columns', function(req, res) {
         });
     }
     //父栏目
-    var link = '/' + pinyin(rDate.name);
+    var link = '/' + pinyin(rData.name);
     var saveData = {
         parent_id: rData.parent_id || 0,
         name: rData.name,
