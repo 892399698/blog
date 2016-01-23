@@ -171,6 +171,32 @@ router.get('/articles/:id', function(req, res) {
             })
         })
     })
+//删除文章
+router.delete('/articles/:id', function(req, res) {
+    // console.log(req)
+    var id = req.params.id;
+    mongoose.connect('mongodb://localhost/article');
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function() {
+        console.log('delete mongoose opened!');
+        Article.remove({
+            _id: id
+        }, function(err, doc) {
+            if (err) {
+                res.send({
+                    code: 2000,
+                    msg: "删除失败！"
+                })
+            } else {
+                res.send({
+                    code: 1000
+                })
+            }
+            db.close();
+        })
+    });
+});
     //获取栏目列表
 router.get('/columns', function(req, res, next) {
     mongoose.connect('mongodb://localhost/column');
