@@ -68,7 +68,8 @@ app.use(function(err, req, res, next) {
 //   console.log("server start at port 8089!")
 // })
 app.listen('8089',function(){
-  console.log("server start at port 8089!")
+  console.log("server start at port 8089!");
+  console.log("------------------------------------------");
 })
 console.log("restart at:"+new Date())
 module.exports = app;
