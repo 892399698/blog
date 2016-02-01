@@ -80,7 +80,7 @@ router.post('/articles', function(req, res) {
         updated_at: time
     }
 
-    mongoose.connect('mongodb://localhost/article');
+    mongoose.connect('mongodb://localhost/cssbus');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
@@ -113,7 +113,7 @@ router.get('/articles', function(req, res) {
             msg: "栏目id不能为空！"
         })
     }
-    mongoose.connect('mongodb://localhost/article');
+    mongoose.connect('mongodb://localhost/cssbus');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
@@ -146,7 +146,7 @@ router.get('/articles/:id', function(req, res) {
                 msg: "id不能为空！"
             })
         }
-        mongoose.connect('mongodb://localhost/article');
+        mongoose.connect('mongodb://localhost/cssbus');
         var db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function() {
@@ -175,7 +175,7 @@ router.get('/articles/:id', function(req, res) {
 router.delete('/articles/:id', function(req, res) {
     // console.log(req)
     var id = req.params.id;
-    mongoose.connect('mongodb://localhost/article');
+    mongoose.connect('mongodb://localhost/cssbus');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
@@ -199,7 +199,7 @@ router.delete('/articles/:id', function(req, res) {
 });
     //获取栏目列表
 router.get('/columns', function(req, res, next) {
-    mongoose.connect('mongodb://localhost/column');
+    mongoose.connect('mongodb://localhost/cssbus');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
@@ -231,7 +231,7 @@ router.get('/columns/:id', function(req, res, next) {
                 msg: "id不能为空！"
             })
         }
-        mongoose.connect('mongodb://localhost/column');
+        mongoose.connect('mongodb://localhost/cssbus');
         var db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function() {
@@ -288,7 +288,7 @@ router.post('/columns', function(req, res) {
     }
 
     //保存
-    mongoose.connect('mongodb://localhost/column');
+    mongoose.connect('mongodb://localhost/cssbus');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
@@ -340,7 +340,7 @@ router.put('/columns/:id', function(req, res) {
             updated_at: (new Date())
         }
         //保存
-    mongoose.connect('mongodb://localhost/column');
+    mongoose.connect('mongodb://localhost/cssbus');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {
@@ -371,7 +371,7 @@ router.put('/columns/:id', function(req, res) {
 router.delete('/columns/:id', function(req, res) {
     // console.log(req)
     var id = req.params.id;
-    mongoose.connect('mongodb://localhost/column');
+    mongoose.connect('mongodb://localhost/cssbus');
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {

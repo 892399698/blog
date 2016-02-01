@@ -16,59 +16,61 @@ router.get('/', function(req, res) {
   // var ap,cp;
   db.once("open",function(){
     console.log("db connectioned!");
-    // cp = Promise.resolve(Column.find());
-    // ap = Promise.resolve(Article.find());
+    var cp = Promise.resolve(Column.find());
+    var ap = Promise.resolve(Article.find());
     // // Article.find(function(err,doc){
     // //   console.log(doc)
     // // })
     // //promise 解决多个异步查询
-    // Promise.all([cp,ap])
-    // .then(function(docs){
-    //   db.close();
-    //   console.log(docs)
-    //   res.render('index', {columns: docs[0],articles: docs[1],title:"首页"});
-    // }).catch(function (error) {
-    //   // return next(error);
-    //   console.log(error);
-    // });
-    Column.find(function(err,doc){
-        if(err){
-            console.log("获取栏目信息错误:");
-            console.log(err);
-            res.render('index',{
-                columns:[],
-                title:title
-            })
-        }else{
-          console.log(doc)
-          // var result=common.formatArrByKey(doc,"_id");
-          //   res.render('index',{
-          //       columns:result,
-          //       title:title
-          //   })
-        }
-        
-    })
-    Article.find(function(err,doc){
-        if(err){
-            console.log("获取文章信息错误:");
-            console.log(err);
-            res.render('index',{
-                columns:[],
-                title:title
-            })
-        }else{
-          // var result=common.formatArrByKey(doc,"_id");
-          //   res.render('index',{
-          //       columns:result,
-          //       title:title
-          //   })
-          console.log(doc)
-        }
-        console.log("closed")
-        db.close();
-    })
+    Promise.all([cp,ap])
+    .then(function(docs){
+      db.close();
+      console.log(docs)
+      res.render('index', {columns: docs[0],articles: docs[1],title:"首页"});
+    }).catch(function (error) {
+      // return next(error);
+      res.rend('index',{title:"首页获取数据错误!"});
+      console.log(error);
+    });
   })
+  //   Column.find(function(err,doc){
+  //       if(err){
+  //           console.log("获取栏目信息错误:");
+  //           console.log(err);
+  //           res.render('index',{
+  //               columns:[],
+  //               title:title
+  //           })
+  //       }else{
+  //         console.log(doc)
+  //         var result=common.formatArrByKey(doc,"_id");
+  //         res.render('index',{
+  //             columns:result,
+  //             title:title
+  //         })
+  //       }
+        
+  //   })
+  //   Article.find(function(err,doc){
+  //       if(err){
+  //           console.log("获取文章信息错误:");
+  //           console.log(err);
+  //           res.render('index',{
+  //               columns:[],
+  //               title:title
+  //           })
+  //       }else{
+  //         var result=common.formatArrByKey(doc,"_id");
+  //           res.render('index',{
+  //               columns:result,
+  //               title:title
+  //           })
+  //         console.log(doc)
+  //       }
+  //       console.log("closed")
+  //       db.close();
+  //   })
+  // })
   // articleDb.once("open",function(){
   //   console.log("article db connectioned!");
   //   // ap = Promise.resolve(Article.find());
@@ -92,9 +94,6 @@ router.get('/', function(req, res) {
   //   //     db.close();
   //   // })
   // })
-
-
-
 });
 
 module.exports = router;
