@@ -48,7 +48,6 @@ router.get('/', function(req, res, next) {
 router.post('/articles', function(req, res) {
     var rData = req.body.article,
         msg = '';
-    console.log(rData)
     if (!rData) {
         msg = "提交数据不能为空！";
     } else if (!rData.title) {
