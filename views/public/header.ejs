@@ -35,7 +35,7 @@
         <li class="active">
           <a href="/">首页</a>
         </li>
-        <% if (columns && columns.length) { %>  
+        <% if (typeof columns !== 'undefined' && columns && columns.length) { %>  
           <% columns.forEach(function(_item){%>
             <%if(_item.children && _item.children.length){%>
             <li class="dropdown">
