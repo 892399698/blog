@@ -9,6 +9,7 @@ var http= require("http");
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var blogInter = require('./routes/blog_interface');
+var emberInter = require('./routes/ember_interface');
 var entry=require('./routes/entry');
 // var column=require('./routes/column');
 var app = express();
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/blog_interface', blogInter);
+app.use('/ember_interface', emberInter);
 app.use('/entry',entry);
 
 
