@@ -14,8 +14,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/getArticle', function(req, res) {
-    var pName=req.query.pTitle;
-    var name=req.query.title;
+    var pName=req.query.namespace;
+    var name=req.query.property;
 
     if(!pName || !name){
         res.send({
