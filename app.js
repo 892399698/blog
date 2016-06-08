@@ -11,6 +11,13 @@ var users = require('./routes/users');
 var blogInter = require('./routes/blog_interface');
 var emberInter = require('./routes/ember_interface');
 var entry=require('./routes/entry');
+var session = require('express-session');
+app.use(session({
+    secret: 'ember_api',
+    cookie: {
+        maxAge: 1000 * 60 * 30
+    }
+}));
 // var column=require('./routes/column');
 var app = express();
 
