@@ -12,15 +12,15 @@ var blogInter = require('./routes/blog_interface');
 var emberInter = require('./routes/ember_interface');
 var entry=require('./routes/entry');
 var session = require('express-session');
+
+// var column=require('./routes/column');
+var app = express();
 app.use(session({
     secret: 'ember_api',
     cookie: {
         maxAge: 1000 * 60 * 30
     }
 }));
-// var column=require('./routes/column');
-var app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

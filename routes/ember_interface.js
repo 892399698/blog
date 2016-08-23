@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var moment = require('moment');
-var common = require('common');
+var common = require('../lib/common');
 // var Column = require('../models/column');
 var Article = require('../models/ember_api/article');
 var pinyin = require('pinyin');
@@ -35,7 +35,14 @@ var Admin = mongoose.model('admin', AdminSchema)
 router.get('/', function(req, res, next) {
     res.send('respond with a resource');
 });
-router.post('/login', function(req, res) {
+router.get('/init_conf_data',function(req,res){
+    console.log(req.session.user)
+    var status=req.session.user?1:0;
+    res.send({
+        status:status
+    })
+});
+router.post('/login', function(req, res,next) {
     var u = req.body.name,
         p = req.body.password;
     if (!u || !p) {
@@ -57,7 +64,7 @@ router.post('/login', function(req, res) {
         Admin.findOne({ name: u }, function(err, doc) {
             if (err) return console.error(err);
             // console.log( doc)
-            if (doc && common.md5(p) === doc.password) {
+            if (doc && p === doc.password) {
                 req.session.user = doc;
                 res.send({
                     code: 1000,
@@ -80,9 +87,9 @@ router.post('/login', function(req, res) {
 
 
     if (!req.session.user) {
-        if (req.url == "/login") {
-            next(); //如果请求的地址是登录则通过，进行下一个请求
-        } else {
+        if (req.url !== "/login") {
+        //     next(); //如果请求的地址是登录则通过，进行下一个请求
+        // } else {
             res.redirect('/login');
         }
     } else {
