@@ -9,3 +9,8 @@ install ruby
  rvm list known
 6.安装一个 Ruby 版本
   rvm install 2.3.0 --disable-binary
+
+
+
+
+
