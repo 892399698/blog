@@ -10,6 +10,8 @@ install ruby
 6.安装一个 Ruby 版本
   rvm install 2.3.0 --disable-binary
 
+ps：安装过程中如果报错 移除/etc/apt/sources.list中返回结果为404的源。
+
 
 
 
