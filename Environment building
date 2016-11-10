@@ -23,4 +23,5 @@ mkmf.rb can't find header files for ruby at
 /System/Library/Frameworks/Ruby.framework/Versions/2.1/usr/lib/ruby/ruby.h 
 http://blog.csdn.net/xinguimeng/article/details/49728821
 
-
+更改RubyGemst源
+bundle config 'mirror.https://rubygems.org' 'https://ruby.taobao.org'
