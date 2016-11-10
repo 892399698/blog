@@ -12,7 +12,15 @@ install ruby
 
 ps：安装过程中如果报错 移除/etc/apt/sources.list中返回结果为404的源。
 
+有时候在ruby下使用gem安装包的时候，会报错如下：
 
-
+     ERROR:  Error installing bluecloth:  
+  ERROR: Failed to build gem native extension.  
+  
+/System/Library/Frameworks/Ruby.framework/Versions/2.1/usr/bin/ruby  
+extconf.rb  
+mkmf.rb can't find header files for ruby at  
+/System/Library/Frameworks/Ruby.framework/Versions/2.1/usr/lib/ruby/ruby.h 
+http://blog.csdn.net/xinguimeng/article/details/49728821
 
 
